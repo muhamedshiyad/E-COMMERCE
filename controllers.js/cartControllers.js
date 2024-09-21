@@ -1,28 +1,23 @@
 const { Cart } = require("../models/cartModel");
 const { Product } = require("../models/productModel");
 
-const addToCart = async (req, res) => {
+const addTocart = async (req, res) => {
     try {
         const userId = req.user.id;
         const { productId } = req.body;
 
-        const course = await Product.findById(productId);
-        if (!course) {
-            return res.status(404).json({ message: "product not found" });
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
         }
 
         let cart = await Cart.findOne({ userId });
         if (!cart) {
-            cart = new Cart({ userId, productes: [] });
+            cart = new Cart({ userId, products: [] });
         }
 
-        const courseExists = cart.product.some((item) => item.productId.equals(productId));
-        if (productExists) {
-            return res.status(400).json({ message: "product already in cart" });
-        }
-
-        cart.productes.push({
-            producId,
+        cart.products.push({
+            productId,
             price: product.price,
         });
 
@@ -35,44 +30,63 @@ const addToCart = async (req, res) => {
         res.status(500).json({ message: "Internal server error", error });
     }
 };
+const updatecart = async(req,res) => {
+    try {
+        const userId = req.res.id;
+        const {productId}=req.body;
 
+        const product = await Product.findById(productId);
+        if(!product){
+            return res.status(404).json({ message : "Product not found"});
+        }
 
-const removeFromCart = async (req, res) => {
+        const cart = await Cart.findByIdAndUpdate({_id:userId},{$push:{ products:{productId,price:product.price}}});
+
+        cart.calculateTotalPrice();
+
+        await cart.save();
+
+        res.status(200).json({cart});
+    } catch (error) {
+        res.status(500).json({ message : "Internal server error",error});
+    }
+}
+
+const removecart = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { producId } = req.body;
+        const { productId } = req.body;
 
         let cart = await Cart.findOne({ userId });
         if (!cart) {
             return res.status(404).json({ message: "Cart not found" });
         }
 
-        cart.productes = cart.product.filter((item) => item.productId != productId);
+        cart.products = cart.products.filter((item) => item.productId != productId);
 
         cart.calculateTotalPrice();
 
         await cart.save();
-
 
         res.status(200).json({ success: true, message: "cart item removed", data: cart });
     } catch (error) {
         res.status(500).json({ message: "Internal server error", error });
     }
 };
-
-const getCart = async (req, res) => {
-    try {
+const getcart = async(req,res)=>{
+     try{
         const userId = req.user.id;
 
-        const cart = await Cart.findOne({ userId }).populate("product.productId");
-        if (!cart) {
-            return res.status(404).json({ message: "Cart not found" });
+        const cart = await Cart.findOne({ userId }).populate('products.productId');
+        if(!cart) {
+            return res.status(404).json({message:"cart not found"});
         }
 
         res.status(200).json(cart);
-    } catch (error) {
-        res.status(500).json({ message: "Internal server error", error });
-    }
+     }catch(error){
+        res.status(500).json({message:"internal server error",error});
+     }
 };
 
-module.exports = { addToCart, removeFromCart, getCart };
+
+module.exports = {addTocart,removecart,getcart,updatecart};

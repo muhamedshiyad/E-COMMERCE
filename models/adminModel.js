@@ -19,6 +19,11 @@ const adminSchema = new mongoose.Schema({
     person:{
         type :mongoose.Schema.Types.ObjectId,
     },
+    role : {
+        type : String,
+        enum :["mentor","admin"],
+        default : "admin",
+    }
 });
 
 const Admin = mongoose.model("Admin",adminSchema);

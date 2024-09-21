@@ -21,10 +21,10 @@ const productSchema = new mongoose.Schema({
     },
     price : Number,
     id : {
-        type : Schema.Types.ObjectId,
+        type :mongoose.Schema.Types.ObjectId,
     },
 });
 
 const Product = mongoose.model("Product",productSchema);
 
-module.exports ={Product};
+module.exports ={ Product };

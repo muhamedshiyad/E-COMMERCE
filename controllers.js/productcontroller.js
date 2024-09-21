@@ -53,7 +53,7 @@ const updateproduct = async (req,res,next)=>{
             {title,description,duration,price},
             {new:true});
 
-        res.status(201).json({ success : true, message:"product updated successfully",data : updatedproduct});
+        res.status(200).json({ success : true, message:"product updated successfully",data : updatedproduct});
     } catch (error) {
         next(error)
     }
@@ -66,7 +66,7 @@ const deleteproduct = async (req,res,next)=>{
 
         if(!productDelelted)res.status(400).json({success: true, message:"product already deleted" });
 
-        res.status(201).json({ success : true, message:"product updated successfully",data : updatedproduct});
+        res.status(200).json({ success : true, message:"product delete successfully",data : productDelelted});
     } catch (error) {
         next(error)
     }

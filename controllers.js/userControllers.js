@@ -64,8 +64,8 @@ const userLogout = async (req, res, next) => {
         res.json({ message: "user logout success", success: true });
     } catch (error) {
         console.log(error);
-        res.status(error.statusCode || 500).json({ message :error.message || "internal server error"})
-    }
+        next(error);
+        }
 };
 const userProfile = async (req, res, next) => {
     try {

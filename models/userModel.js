@@ -16,6 +16,11 @@ const userSchema = new mongoose.Schema({
         minlenght : 8,
     },
     phone :String,
+    address : {
+        houseNo:String,
+        street : String,
+        state : String,
+    },
     product : {
         type :mongoose.Schema.Types.ObjectId,
         ref :"product",

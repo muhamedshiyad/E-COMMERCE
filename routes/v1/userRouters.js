@@ -13,9 +13,6 @@ router.put('/update', );
 router.delete('/delete', );
 
 router.get('/userlist', );
-
-
-
 router.get('/check-user',userAuth,checkUser );
 
 module.exports  = {userRouter:router};
